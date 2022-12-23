@@ -1,0 +1,132 @@
+﻿@model IEnumerable<Comment>
+
+@{
+    ViewData["Title"] = "Yorumlar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container main_section mt-5 pt-3">
+    <h1 class="texts">Yorumlar</h1>
+    <div class="table-responsive texts">
+        <table id="myTable" class="display table table-bordered table-hover">
+            <thead>
+                <tr class="texts">
+                    <th>
+                        Id
+                    </th>
+                    <th>
+                        İsim
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Başlık
+                    </th>
+                    <th>
+                        Açıklama
+                    </th>
+                    <th>
+                        Yazı Başlığı
+                    </th>
+                    <th>
+                        Oluşturulma Tarihi
+                    </th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="texts">
+                        <td>
+                            <p>@item.Id</p>
+                        </td>
+                        <td>
+                            @if (item.FirstAndLastName != null)
+                            {
+                                <p>@item.FirstAndLastName</p>
+                            }
+                            else
+                            {
+                                <p>Anonim</p>
+                            }
+
+                        </td>
+                        <td>
+                            @if (item.Email != null)
+                            {
+                                <p>@item.Email</p>
+                            }
+                            else
+                            {
+                                <p>Anonim</p>
+                            }
+                        </td>
+                        <td>
+                            <p>@item.Title</p>
+                        </td>
+                        <td>
+                            <p>@(item.Content.Length > 150 ? item.Content.Substring(0, item.Content.Substring(0, 151).LastIndexOf(" ")) + "..." : item.Content + "...")</p>
+                        </td>
+                        <td>
+                            <p>@(item!.Title!.Length > 50 ? item.Post.Title.Substring(0, item.Post.Title.Substring(0, 51).LastIndexOf(" ")) + "..." : item.Post.Title + "...")</p>
+                        </td>
+                        <td>
+                            <p>@item.CreatedDate.ToShortDateString()</p>
+                        </td>
+                        <td style="vertical-align: middle;">
+                            <a asp-action="Details" asp-controller="Post" asp-route-id="@item.PostId" asp-route-title="@FriendlyUrllHelper.GenerateTitle(item.Post.Title)"><i class='bx bxs-comment-detail' style="font-size: 25px; color:#497174"></i></a>
+                        </td>
+                        <td style="vertical-align: middle;">
+                            <a id="btnDelete" data-toggle="modal" data-target="#DeleteModal-@item.Id"><i class='bx bxs-x-circle' style="font-size: 25px; color:red; cursor:pointer"></i></a>
+                            @using (Html.BeginForm("RemoveComment", "Comment", new { id = item.Id }, FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                <div class="modal" tabindex="-1" role="dialog" id="DeleteModal-@item.Id">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">@item.Title Siliniyor!!</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Silmek istediğine emin misin?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                                                <button type="submit" class="btn btn-danger">Sil</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="~/js/notify.js"></script>
+<script src="~/js/notify.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+    });
+</script>
+
+@if (TempData["RemoveComment"] != null)
+{
+    <script type="text/javascript">
+        $.notify("Yorum başarıyla silindi!", "success");
+    </script>
+}

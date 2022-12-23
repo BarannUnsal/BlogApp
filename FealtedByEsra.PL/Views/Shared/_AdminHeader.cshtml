@@ -1,0 +1,45 @@
+﻿<nav>
+    <div class="nav-bar">
+        <i class='bx bx-menu sidebarOpen'></i>
+        <span class="logo navLogo"><a asp-controller="Home" asp-action="Index">Admin</a></span>
+
+        <div class="menu">
+            <div class="logo-toggle">
+                <span class="logo"><a asp-controller="Home" asp-action="Index">Admin</a></span>
+                <i class='bx bx-x sidebarClose'></i>
+            </div>
+
+            <ul class="nav-links">
+                <li><a asp-controller="Post" asp-action="GetPost">Yazılar</a></li>
+                <li><a asp-controller="Category" asp-action="GetCategory">Kategoriler</a></li>
+                <li><a asp-controller="Comment" asp-action="GetComment">Yorumlar</a></li>
+                <li><a asp-controller="Contact" asp-action="GetContact">Mesajlar</a></li>
+                <li><a asp-action="Settings" asp-controller="Setting">Ayarlar</a></li>
+                <li><a asp-action="LogOut" asp-controller="User" asp-route-returnUrl="/Home/Index">Çıkış</a></li>
+            </ul>
+        </div>
+
+        <div class="darkLight-searchBox">
+            <div class="dark-light">
+                <i class='bx bx-moon moon'></i>
+                <i class='bx bx-sun sun'></i>
+            </div>
+
+            <div class="searchBox">
+                <div class="searchToggle">
+                    <i class='bx bx-x cancel'></i>
+                    <i class='bx bx-search search'></i>
+                </div>
+
+                <div class="search-field">
+                    <form asp-action="SearchPost" method="get" asp-controller="Post">
+                        <input type="text" placeholder="Search..." name="text">
+                        <button type="submit">
+                            <i class='bx bx-search'></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>

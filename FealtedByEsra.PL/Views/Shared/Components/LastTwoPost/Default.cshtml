@@ -1,0 +1,19 @@
+﻿@model IList<Post>
+
+@foreach(var post in Model){
+    <div class="media pb-3">
+        <img class="img-fluid" src="~/PostThumbnail/@post.Thumbnail" height="68" width="100" alt="@post.Title">
+        <div class="media-body d-flex align-self-center">
+            <div class="content">
+                <a asp-action="Details" asp-controller="Post" asp-route-id="@post.Id" asp-route-title="@FriendlyUrllHelper.GenerateTitle(post.Title)">
+                    <p>
+                        @post.Title
+                    </p>
+                </a>
+                <span>
+                    @post.CreatedDate.ToString("MMMM dd, yyyy")
+                </span>
+            </div>
+        </div>
+    </div>
+}

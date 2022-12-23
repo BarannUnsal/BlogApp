@@ -1,0 +1,193 @@
+﻿@model IEnumerable<Comment>
+
+@{
+    var index = 1;
+}
+
+<hr class="mt-5 texts" />
+@if (Model.Count() == 0)
+{
+    <p class="texts">Henüz yorum yapılmamış. İlk yorumu sen yap</p>
+}
+else
+{
+    <h4 class="texts mt-2 pb-3">Yorumlar (@Model.Count())</h4>
+    @foreach (var comment in Model)
+    {
+        <div class="comment mb-4 pb-4">
+            <div class="main_comment">
+                @if (comment.FirstAndLastName == null)
+                {
+                    <p class="texts" style="font-weight:400">
+                        Anonymous | @comment.CreatedDate.ToShortDateString() @if (User!.Identity!.IsAuthenticated)
+                        {
+                            <a id="btnDelete" data-toggle="modal" data-target="#DeleteModal-@comment.Id"><i class='bx bxs-x-circle' style="font-size: 25px; color:red; cursor:pointer"></i></a>
+                            @using (Html.BeginForm("DeleteComment", "Post", new { id = comment.Id }, FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                <div class="modal" tabindex="-1" role="dialog" id="DeleteModal-@comment.Id">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">@comment.Title Siliniyor!!</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Silmek istediğine emin misin?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                                                <button type="submit" class="btn btn-danger">Sil</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </p>
+                }
+                else
+                {
+                    <p class="texts" style="font-weight:500">
+                        <strong>
+                            @comment.FirstAndLastName</strong> | @comment.CreatedDate.ToShortDateString() @if (User!.Identity!.IsAuthenticated)
+                        {
+                            <a id="btnDelete" data-toggle="modal" data-target="#DeleteModal-@comment.Id"><i class='bx bxs-x-circle' style="font-size: 25px; color:red; cursor:pointer"></i></a>
+                            @using (Html.BeginForm("DeleteComment", "Post", new { id = comment.Id }, FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                <div class="modal" tabindex="-1" role="dialog" id="DeleteModal-@comment.Id">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">@comment.Title Siliniyor!!</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Silmek istediğine emin misin?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                                                <button type="submit" class="btn btn-danger">Sil</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </p>
+                }
+                <h6 class="texts" style="font-weight:400">@comment.Title</h6>
+                <p class="texts" style="font-weight:300; line-height: 1.675; word-spacing: 1px; line-break: strict;">@comment.Content</p>
+            </div>
+            <div class="reply_comments">
+                @if (comment.ReplyComments != null)
+                {
+                    @foreach (var item in comment.ReplyComments)
+                    {
+                        <div class="reply_section">
+                            @if (item.FirstAndLastName != null)
+                            {
+                                <p class="texts">
+                                    <strong>@item.FirstAndLastName</strong> | @item.CreatedDate.ToShortDateString()
+                                    @if (User!.Identity!.IsAuthenticated)
+                                    {
+                                        <a id="btnDelete" data-toggle="modal" data-target="#DeleteModal-@item.Id"><i class='bx bxs-x-circle' style="font-size: 25px; color:red; cursor:pointer"></i></a>
+                                        @using (Html.BeginForm("DeleteReplyComment", "Post", new { id = item.Id }, FormMethod.Post))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <div class="modal" tabindex="-1" role="dialog" id="DeleteModal-@item.Id">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">@item.Content Siliniyor!!</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>Silmek istediğine emin misin?</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                                                            <button type="submit" class="btn btn-danger">Sil</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                </p>
+                            }
+                            else
+                            {
+                                <p class="texts">
+                                    Anonymous | @item.CreatedDate.ToShortDateString()
+                                    @if (User!.Identity!.IsAuthenticated)
+                                    {
+                                        <a id="btnDelete" data-toggle="modal" data-target="#DeleteModal-@item.Id"><i class='bx bxs-x-circle' style="font-size: 25px; color:red; cursor:pointer"></i></a>
+                                        @using (Html.BeginForm("DeleteReplyComment", "Post", new { id = item.Id }, FormMethod.Post))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <div class="modal" tabindex="-1" role="dialog" id="DeleteModal-@item.Id">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">@item.Content Siliniyor!!</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>Silmek istediğine emin misin?</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                                                            <button type="submit" class="btn btn-danger">Sil</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                </p>
+
+                            }
+                            <p class="texts pb-4">@item.Content</p>
+                        </div>
+                        
+                    }
+                }
+            </div>
+            <div style="text-align:right; width:100%; padding:0;">
+                <a class="reply_btn" data-toggle="collapse" href="#collapse_@index" data-parent="collapseExample" aria-expanded="false" aria-controls="collapse_@index" style="width:110px; height:30px">Cevapla</a>
+            </div>
+            <div class="collapse" id="collapse_@index">
+                @{
+                    await Html.RenderPartialAsync("ReplyComment", new FealtedByEsra.PL.Models.Comment.CommentViewModel { PostId = comment.PostId, MainId = comment.Id });
+                }
+            </div>            
+        </div>
+        index++;
+    }
+}
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+<script>
+    function showReplyComment() {
+        var x = document.getElementById("reply_section");
+        var btn = document.getElementsByClassName("reply_btn");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+</script>

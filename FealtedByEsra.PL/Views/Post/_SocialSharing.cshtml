@@ -1,0 +1,24 @@
+﻿@model string
+@{
+    string currentUrl = Context.Request.Scheme + "://" + Context.Request.Host + Context.Request.Path;
+    string enc = System.Net.WebUtility.UrlEncode(currentUrl);
+    string text = System.Net.WebUtility.UrlEncode(Model);
+}
+
+<aside class="socialsharing me-2">
+        <a href="https://www.facebook.com/sharer/sharer.php?u=@enc" target="_blank" rel="noopener noreferrer nofollow">
+            <i class='bx bxl-facebook-square'></i>
+        </a>
+        <a href="https://twitter.com/intent/tweet?url=@enc&text=@text" target="_blank" rel="noopener noreferrer nofollow">
+            <i class='bx bxl-twitter'></i>
+        </a>
+    <a href="https://www.linkedin.com/sharing/share-offsite/?url=@currentUrl&title=@text" target="_blank">
+            <i class='bx bxl-linkedin-square'></i>
+        </a>
+        <a href="https://plus.google.com/share?url=@enc" target="_blank" rel="noopener noreferrer nofollow">
+            <i class='bx bxl-google-plus'></i>
+        </a>
+        <a href="mailto:?subject=@Model.Replace(" ", "%20")&amp;body=@enc" target="_blank" rel="noopener noreferrer nofollow">
+            <i class='bx bx-envelope'></i>
+        </a>
+</aside>

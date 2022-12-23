@@ -1,0 +1,27 @@
+﻿@model IList<Post>
+
+
+<div class="single-sidebar-widget popular-post-widget">
+    <h5 class="single-sidebar-widget__title mt-5 pt-5">En Çok Okunan Yazılar</h5>
+    @foreach (var post in Model)
+    {
+        <div class="popular-post-list">
+            <div class="single-post-list">
+                <div class="thumb">
+                    <picture>
+                        <img class="card-img rounded-0" width="300" height="138" src="~/PostThumbnail/@post.Thumbnail" alt="@post.Title">
+                    </picture>
+                    <ul class="thumb-info">
+                        <li><a asp-action="Details" asp-controller="Post" asp-route-id="@post.Id" asp-route-title="@FriendlyUrllHelper.GenerateTitle(post.Title)">@post.Category.CategoryName</a></li>
+                        <li><a asp-action="Details" asp-controller="Post" asp-route-id="@post.Id" asp-route-title="@FriendlyUrllHelper.GenerateTitle(post.Title)">@post.CreatedDate.Day @post.CreatedDate.ToString("MMM")</a></li>
+                    </ul>
+                </div>
+                <div class="details mt-20">
+                    <a asp-action="Details" asp-controller="Post" asp-route-id="@post.Id" asp-route-title="@FriendlyUrllHelper.GenerateTitle(post.Title)" class="text-decoration-none">
+                        <h6>@post.Title</h6>
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,94 @@
+﻿@using FealtedByEsra.BAL.Helpers.UrlHelpers
+@using FealtedByEsra.Entity.Entities
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Web.Common
+@model IPagedList<Post>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "Ana Sayfa";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (ViewBag.cat != null)
+{
+    <section>
+        <div class="container">
+            <div class="hero-banner">
+                <div class="hero-banner__content">
+                    <a style="text-decoration:none; line-height: 1.675; word-spacing: 1px; line-break: strict;" asp-action="Index" asp-controller="Home">Ana sayfa</a> <i class='bx bx-right-arrow-alt'></i>
+                    @for (int i = 1; i < 2; i++)
+                    {
+                        <p>
+                            @Model[i].Category.CategoryName
+                        </p>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+}
+else
+{
+    <section>
+        <div class="container">
+            <div class="hero-banner">
+                <div class="hero-banner__content">
+                    <div class="container">
+                        <h4 style="text-decoration:none; line-height: 1.675; word-spacing: 1px; line-break: strict;">Mutluluk tıpkı bir kelebek gibidir; ne kadar kovalarsan, o kadar sakınır senden, fakat dikkatini başka<br> şeylere çevirdiğinde, nazikçe gelip omuzuna konacaktır. </h4>
+                        <h6 style="color: #f6f6f6" class="pt-3">- Henry David Thoreau</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+
+<div class="container">
+    <div class="row  main_section mt-3">
+        <div class="col-lg-9 col-md-9 col-sm-9 mt-4 me-auto pt-3">
+            @foreach (var post in Model)
+            {
+                <div class="container mb-5 pb-1">
+                    <h3 class="texts">@post.Title</h3>
+                    <p class="texts pt-1" style="color: #999C9F"><i class='bx bx-calendar'></i>@post.CreatedDate.Day @post.CreatedDate.ToString("MMM") | <a style="color: #999C9F" href="@Url.Action("Index", "Home", new {category = post.CategoryId})"><i class='bx bx-category-alt'></i>@post.Category.CategoryName</a></p>
+                    <picture>
+                        <img src="~/PostThumbnail/@post.Thumbnail" class="img-fluid">
+                    </picture>
+                    <div class="texts pt-2">
+                        @Html.Raw(post.Description.Length > 150 ? post.Description.Substring(0, post.Description.Substring(0, 151).LastIndexOf(" ")) + "..." : post.Description + "")
+                    </div>
+                    <a class="read_more_btn mt-2" asp-action="Details" asp-controller="Post" asp-route-id="@post.Id" asp-route-title="@FriendlyUrllHelper.GenerateTitle(post.Title)">Devamınızı Oku ></a>
+                </div>
+            }
+
+            @if (User!.Identity!.IsAuthenticated)
+            {
+                <a id="add_post_btn" asp-action="AddPost" asp-controller="Post"><i class='bx bx-edit-alt add_post_icon'></i></a>
+            }
+
+            <div class="text-center">
+                @Html.PagedListPager(Model, page => Url.Action("index", new { page = page, category =  ViewBag.cat }), new PagedListRenderOptions()
+                {
+                ActiveLiElementClass = "active",
+                PageClasses = new[]{ "page-link"},
+                LiElementClasses=new[] { "page-item" },
+                UlElementClasses = new[] { "pagination","justify-content-center", "mt-3" },
+                })
+            </div>
+
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-3 mt-4 me-auto pt-3">
+            <div>
+                @await Html.PartialAsync("../Newsletter/SubscribeMail.cshtml")
+            </div>
+            <div>
+                @await Component.InvokeAsync("CategoryRightSection")
+            </div>
+            <div>
+                @await Component.InvokeAsync("TopThreePost")
+            </div>
+        </div>
+    </div>
+</div>

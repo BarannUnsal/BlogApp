@@ -1,0 +1,84 @@
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Web.Common
+@model IPagedList<FealtedByEsra.Entity.Entities.Post>
+
+@{
+    if (ViewBag.txt != null)
+    {
+        ViewData["Title"] = $"({ViewBag.txt}) Aranan Kelime";
+    }
+    else{
+        ViewData["Title"] = "Sonuç bulunamadı";
+    }
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="mb-30px">
+    <div class="container">
+        <div class="hero-banner">
+            <div class="hero-banner__content">
+                <a style="text-decoration:none; line-height: 1.675; word-spacing: 1px; line-break: strict;" asp-action="Index" asp-controller="Home">Ana sayfa</a> <i class='bx bx-right-arrow-alt'></i>
+                <p style="line-height: 1.675; word-spacing: 1px; line-break: strict; text-decoration:none;">@ViewBag.txt Aranan Kelime</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container mb-5 pb-5 mt-4">
+    @if (Model.Count() == 0)
+    {
+        <h5 class="texts mb-4">Bulunan Sonuçlar: (0) sonuç bulundu</h5>
+    }
+    else
+    {
+        <h5 class="texts mb-4">Bulunan Sonuçlar: (@Model.Count()) sonuç bulundu</h5>
+    }
+    <section class="container">
+        <div class="row">
+            <div class="col-lg-12 mt-4 me-auto pt-3 main_section">
+                @if (Model.Count() <= 0)
+                {
+                    <div class="container">
+                        <p class="texts">Sonuç bulunamadı aradğınız kelimeyi kontrol ediniz</p>
+                    </div>
+                }
+                else
+                {
+                    @foreach (var post in Model)
+                    {
+                        <div id="paginated-list" data-current-page="1" class="pt-1 pb-5" aria-live="polite">
+                            <div class="text-center pb-5">
+                                <picture>
+                                    <img src="~/PostThumbnail/@post.Thumbnail" width="730" height="400" class="img-fluid" alt="@post.Title">
+                                    @*<ul class="thumb-info">
+                            <li><a href="#"><i class="ti-user"></i>Admin</a></li>
+                            <li><a href="#"><i class="ti-notepad"></i>January 12,2019</a></li>
+                            <li><a href="#"><i class="ti-themify-favicon"></i>2 Comments</a></li>
+                            </ul>*@
+                                </picture>
+                            </div>
+                            <h3 class="texts" style="font-weight: 500;">
+                                @post.Title
+                            </h3>
+                            <p class="texts" style="font-weight: 400">@post.Category.CategoryName | @post.CreatedDate.ToShortDateString()</p>
+                            <div class="texts" style="font-weight: 300">@Html.Raw(post.Description.Length > 272 ? post.Description.Substring(0, post.Description.Substring(0, 273).LastIndexOf(" ")) + "..." : post.Description + "...")</div>
+                            <a class="read_more_btn mt-3 mb-3" asp-action="Details" asp-controller="Post" asp-route-id="@post.Id" asp-route-title="@FriendlyUrllHelper.GenerateTitle(post.Title)">Devamını Oku <i class='bx bx-right-arrow-alt'></i></a>
+                        </div>
+                    }
+                }
+
+                @Html.PagedListPager((IPagedList?)Model,
+                page => Url.Action("SearchPost",
+                new { page, text = ViewBag.txt }),
+                new PagedListRenderOptions()
+                {
+                PageClasses = new string[] { "page-link" },
+                UlElementClasses = new string[] { "pagination" },
+                LiElementClasses = new string[] { "page-item" },
+                })
+            </div>
+        </div>
+    </section>
+</div>
+

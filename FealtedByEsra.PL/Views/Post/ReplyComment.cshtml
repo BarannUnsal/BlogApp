@@ -1,0 +1,32 @@
+﻿@model CommentViewModel
+
+@using Microsoft.Extensions.Configuration
+@using Microsoft.Extensions.Options
+@inject IOptions<FealtedByEsra.BAL.Helpers.GoogleHelpers.GoogleHelper> GoogleCapchaConfig
+
+<form method="post" action="@Url.Action("Comment", "Post")" class="mt-3 mb-4" id="commnetForm">
+    <input asp-for="PostId" type="hidden" />
+    <input asp-for="MainId" type="hidden" />
+    <div class="row mb-2">
+        <div class="col-lg-6">
+            <label class="lbl_input">Adınız</label>
+            <input type="text" class="add_comment" name="FirstAndLastName" />
+        </div>
+        <div class="col-lg-6">
+            <label class="lbl_input">Email <small style="font-weight: 300; font-size: 13px;">(Email adresiniz paylaşılmaz)</small></label>
+            <input type="email" class="add_comment" name="Email" />
+            @Html.ValidationMessageFor(c => c.Email, "", new {@class="text-danger"})
+        </div>
+    </div>
+    <label class="lbl_input">Yorumunuz<span class="text-danger"> *</span></label>
+    <textarea type="text" class="add_comment" rows="6" name="Content" required></textarea>
+    @Html.ValidationMessageFor(c => c.Content, "", new {@class = "text-danger"})
+    <div class="text-center">
+        <button type="submit" class="add_comment_btn">Yorum Yap</button>
+    </div>
+</form>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+<partial name="_ValidationScriptsPartial" />

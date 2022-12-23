@@ -1,0 +1,68 @@
+﻿@using Microsoft.Extensions.Configuration
+@using Microsoft.Extensions.Options
+@inject IOptions<FealtedByEsra.BAL.Helpers.GoogleHelpers.GoogleHelper> GoogleCapchaConfig
+
+<h5 class="single-sidebar-widget__title">
+    Haber Bülteni
+</h5>
+<p class="texts">Yeni yazılarımı kaçırmamak için bültenime abone olabilir ve erken okuma fırsatını elde edebilirsiniz.</p>
+<form method="post" action="@Url.Action("SubscribeMail", "Newsletter")" class="newsletter_home pb-5" id="topNewsletter">
+    <input name="Token" type="hidden" id="tokenSide" />
+    <input type="email" placeholder="E-mail adresinizi giriniz.." id="emailInput" name="Email" required />
+    @Html.ValidationSummary(false)
+    <button type="submit">Abone Ol</button>
+</form>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script src="https://www.google.com/recaptcha/api.js?render=@GoogleCapchaConfig.Value.SiteKey"></script>
+<partial name="_ValidationScriptsPartial" />
+
+<script>
+    $(function () {
+        grecaptcha.ready(function () {
+            grecaptcha.execute('@GoogleCapchaConfig.Value.SiteKey', { action: 'subscribemail' }).then(function (token) {
+                $("#tokenSide").val(token);
+            });
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        $('#topNewsletter').submit(function (e) {
+            e.preventDefault();
+            let datas = { email: $('#emailInput').val(), token: $('#tokenSide').val() }
+            $.ajax({
+                url: '@Url.Action("SubscribeMail", "Newsletter")',
+                type: 'POST',
+                data: datas,
+                success: function () {
+                    $.notify("Abone olundu!", "success");
+                },
+                error: function () {
+                    $.notify("Hata!", "error");
+                }
+            });
+        });
+    });
+    //function Subscribe() {
+    //    let datas = { email: $('#emailInput').val(), token: $('#tokenSide').val() }
+
+    //    $.ajax({
+    //        async: true,
+    //        type: 'POST',
+    //        url: '@Url.Action("SubscribeMail", "Newsletter")',
+    //        data: datas,
+    //        success: function (result) {
+    //            $.notify("Abone olundu!", "success");
+    //        },
+    //        error: function () {
+    //            $.notify("Hata!", "error");
+    //        }
+    //    });
+    //}
+
+    //setInterval(Subscribe(), 115000);
+</script>

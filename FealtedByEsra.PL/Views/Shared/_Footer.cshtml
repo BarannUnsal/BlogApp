@@ -1,0 +1,69 @@
+﻿<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-lg-4 pb-2">
+            <div class="widget1">
+                <div class="logo">
+                    <h1 class="footer_title">Esra Arga</h1>
+                </div>
+                <p style="text-align:start; line-height: 1.32; word-spacing: 0.75px; line-break: strict;">
+                    Ben Esra. Senden çok da farklı değilim. Doğdum, büyüdüm, okudum, çalıştım, emekli oldum. Bu işleri yaparken belki                       senden önce yaptım bunları, belki aynı zamanda yapıyoruz, belki de senin daha yolun var. Seninle ortak noktamız                         belki, yazmayı da okumak kadar çok seviyor olmamız olabilir.
+                </p>
+                <div class="socialLinks">
+                    <ul>
+                        <li>
+                            <a href="https://www.facebook.com/earga" target="_blank">
+                                <i class='bx bxl-facebook'></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://twitter.com/esrarga" target="_blank">
+                                <i class='bx bxl-twitter'></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.instagram.com/esra__arga/" target="_blank">
+                                <i class='bx bxl-instagram'></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.linkedin.com/in/esra-arga-a7616728/" target="_blank">
+                                <i class='bx bxl-linkedin'></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4 pb-2">
+            <div class="widget2">
+                <h5>
+                    Son Gönderiler
+                </h5>
+                @await Component.InvokeAsync("LastTwoPost")
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+            <div class="widget3">
+                <h5>
+                    Haber Bülteni
+                </h5>
+                <p>Yeni yazılarımı kaçırmamak için bültenime abone olabilir ve erken okuma fırsatını elde edebilirsiniz.</p>
+                @await Html.PartialAsync("../Newsletter/SubscribeMailFooter.cshtml")
+            </div>
+        </div>
+    </div>
+</div>
+<div class="copyRightArea">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <p>
+                    Bu site reCAPTCHA tarafından korunmaktadır ve Google
+                    <a href="https://policies.google.com/privacy">Gizlilik Politikası</a> ile
+                    <a href="https://policies.google.com/terms">Hizmet Şartları</a> geçerlidir.
+                </p>
+                <p>&copy; Tüm Hakları Saklıdır @DateTime.Now.Year.ToString().</p>
+            </div>
+        </div>
+    </div>
+</div>

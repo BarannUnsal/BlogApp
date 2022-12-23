@@ -1,0 +1,129 @@
+﻿@model Post
+@{
+    ViewBag.Title = Model.Title;
+    ViewBag.Description = Model.Description.Length > 155 ? Model.Description.Substring(0, Model.Description.Substring(0, 160).LastIndexOf(" ")) + "..." : Model.Description + "...";
+    ViewBag.cat = Model.Category.CategoryName;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="mb-30px">
+    <div class="container">
+        <div class="hero-banner-details" style="background: url('../../../PostThumbnail/@Model.Thumbnail') center no-repeat;">
+            <div class="hero-banner__content">
+                <a style="text-decoration:none; line-height: 1.675; word-spacing: 1px; line-break: strict;" asp-action="Index" asp-controller="Home">Ana sayfa</a> <i class='bx bx-right-arrow-alt'></i>
+                <a href="@Url.Action("Index", "Home", new {category = Model.CategoryId})" style="line-height: 1.675; word-spacing: 1px; line-break: strict; text-decoration:none;">@Model.Category.CategoryName</a> <i class='bx bx-right-arrow-alt'></i>
+                <p style="line-height: 1.675; word-spacing: 1px; line-break: strict; text-decoration:none;">@Model.Title</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 mt-4 me-auto pt-3 main_section">
+            <h1 class="texts" style="font-weight: 500;">@Model.Title</h1>
+            <p class="texts" style="font-weight: 400;"><a href="@Url.Action("Index", "Home", new {category = Model.CategoryId})">@Model.Category.CategoryName</a> | @Model.CreatedDate.ToString("M") @Model.CreatedDate.ToString("yyy")</p>
+            <div class="texts img-fluid" style="font-weight: 300; line-height: 1.675; word-spacing: 1px; line-break: strict;">
+                @Html.Raw(Model.Description)
+            </div>
+            <div class="text-right">
+            @{
+                await Html.RenderPartialAsync("_SocialSharing", ViewData["Title"]);
+            }
+            </div>
+            <hr class="texts" />
+            <div class="navigation-area">
+                <div class="row">
+                    <input type="hidden" asp-for="Id" />
+                    <div class="col-lg-6 col-md-6 col-12 nav-left flex-row d-flex justify-content-start align-items-center">
+                        @if (ViewBag.prevID != null)
+                        {
+                            <div class="thumb">
+                                <a asp-action="Details" asp-controller="Post" asp-route-id="@ViewBag.prevID" asp-route-title="@FriendlyUrllHelper.GenerateTitle(ViewBag.prevtitle)">
+                                    <picture>
+                                        <img class="img-fluid" width="100" height="100" src="~/PostThumbnail/@ViewBag.prevthumbnail" alt="@ViewBag.prevtitle">
+                                    </picture>
+                                </a>
+                            </div>
+                            <div class="arrow">
+                                <a asp-action="Details" asp-controller="Post" asp-route-id="@ViewBag.prevID" asp-route-title="@FriendlyUrllHelper.GenerateTitle(ViewBag.prevtitle)"><span class="lnr text-white lnr-arrow-left"><i class='bx bx-left-arrow-alt'></i></span></a>
+                            </div>
+                            <div class="detials">
+                                <p>Önceki Yazı</p>
+                                <a asp-action="Details" asp-controller="Post" asp-route-id="@ViewBag.prevID" asp-route-title="@FriendlyUrllHelper.GenerateTitle(ViewBag.prevtitle)"><h4 style="font-weight:500">@ViewBag.prevtitle</h4></a>
+                            </div>
+                        }
+                        else
+                        {
+                            <p></p>
+                        }
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-12 nav-right flex-row d-flex justify-content-end align-items-center">
+                        @if (ViewBag.NextID != null)
+                        {
+                            <div class="detials">
+                                <p>Sonraki Yazı</p>
+                                <a asp-action="Details" asp-controller="Post" asp-route-id="@ViewBag.NextID" asp-route-title="@FriendlyUrllHelper.GenerateTitle(ViewBag.nexttitle)"><h4 style="font-weight:500">@ViewBag.nexttitle</h4></a>
+                            </div>
+                            <div class="arrow">
+                                <a asp-action="Details" asp-controller="Post" asp-route-id="@ViewBag.NextID" asp-route-title="@FriendlyUrllHelper.GenerateTitle(ViewBag.nexttitle)">
+                                    <span class="lnr text-white lnr-arrow-right"><i class='bx bx-right-arrow-alt me-3'></i></span>
+                                </a>
+                            </div>
+                            <div class="thumb">
+                                <a asp-action="Details" asp-controller="Post" asp-route-id="@ViewBag.NextID" asp-route-title="@FriendlyUrllHelper.GenerateTitle(ViewBag.nexttitle)">
+                                    <picture>
+                                        <img class="img-fluid" width="100" height="100" src="~/PostThumbnail/@ViewBag.nextthumbnail" alt="@ViewBag.nexttitle">
+                                    </picture>
+                                </a>
+                            </div>
+                        }
+                        else
+                        {
+                            <p></p>
+                        }
+                    </div>
+                </div>
+            </div>
+            @await Component.InvokeAsync("CommentListByBlog", new{id = Model.Id})
+            <h4 class="texts mt-4" style="font-weight:500">Yorum Yapın</h4>
+            @{
+                await Html.RenderPartialAsync("Comment", new FealtedByEsra.PL.Models.Comment.CommentViewModel { PostId = Model.Id, MainId = 0 });
+            }
+        </div>
+    </div>
+</div>
+
+<script src="~/js/notify.js"></script>
+<script src="~/js/notify.min.js"></script>
+@if (TempData["Update"] != null)
+{
+    <script type="text/javascript">
+        $.notify("Başarıyla yazı güncellendi!", "success");
+    </script>
+}
+@if (TempData["Comment"] != null)
+{
+    <script type="text/javascript">
+        $.notify("Yorum eklendi!", "success");
+    </script>
+}
+@if (TempData["DeleteComment"] != null)
+{
+    <script type="text/javascript">
+        $.notify("Yorum silindi!", "success");
+    </script>
+}
+@if (TempData["ReplyComment"] != null)
+{
+    <script type="text/javascript">
+        $.notify("Cevap verildi!", "success");
+    </script>
+}
+@if (TempData["DeleteReplyComment"] != null)
+{
+    <script type="text/javascript">
+        $.notify("Re-Cevap silindi!", "success");
+    </script>
+}

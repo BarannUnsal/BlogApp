@@ -1,0 +1,35 @@
+﻿@model AdminViewModel
+@{
+    ViewData["Title"] = "Hesap Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container main_section mt-5 pt-3">
+    <h1 class="texts">Bilgileri Güncelle</h1>
+    <form asp-action="UserEdit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label class="texts">İsim ve Soy İsim</label>
+            <input asp-for="NameSurname" class="form-control" />
+            <span asp-validation-for="NameSurname" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="texts">Kullanıcı Adı</label>
+            <input asp-for="UserName" class="form-control" />
+            <span asp-validation-for="UserName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="texts">E-Mail</label>
+            <input asp-for="Email" type="email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="texts">Telefon Numarası</label>
+            <input asp-for="PhoneNumber" type="number" class="form-control" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+        <div class="form-group mt-3">
+            <input type="submit" class="read_more_btn" value="Güncelle" />
+        </div>
+    </form>
+</div>

@@ -1,0 +1,44 @@
+﻿<nav>
+    <div class="nav-bar">
+        <i class='bx bx-menu sidebarOpen'></i>
+        <span class="logo navLogo"><a asp-controller="Home" asp-action="Index" class="header_title">Esra Arga</a></span>
+
+        <div class="menu">
+            <div class="logo-toggle">
+                <span class="logo"><a asp-controller="Home" asp-action="Index" class="header_title">Esra Arga</a></span>
+                <i class='bx bx-x sidebarClose'></i>
+            </div>
+
+            <ul class="nav-links">
+                <li><a asp-controller="Home" asp-action="Index">Ana Sayfa</a></li>
+                <li><a href="/?category=15">Edebiyat</a></li>
+                <li><a href="/?category=64">Teknoloji</a></li>
+                <li><a href="/?category=65">Doğa</a></li>
+                <li><a asp-action="Index" asp-controller="About">Hakkımda</a></li>
+            </ul>
+        </div>
+
+        <div class="darkLight-searchBox">
+            <div class="dark-light">
+                <i class='bx bx-moon moon'></i>
+                <i class='bx bx-sun sun'></i>
+            </div>
+
+            <div class="searchBox">
+                <div class="searchToggle">
+                    <i class='bx bx-x cancel'></i>
+                    <i class='bx bx-search search'></i>
+                </div>
+
+                <div class="search-field">
+                    <form asp-action="SearchPost" method="get" asp-controller="Post">
+                        <input type="text" placeholder="Search..." name="text">
+                        <button type="submit">
+                            <i class='bx bx-search'></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>

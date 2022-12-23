@@ -1,0 +1,26 @@
+﻿@model Category
+
+@{
+    ViewData["Title"] = "Kategori Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container main_section mt-5 pt-3">
+    <h3 class="texts">Kategori Güncelleme</h3>
+
+    <div asp-validation-summary="ModelOnly"></div>
+    @using (Html.BeginForm("EditCategory", "Category", FormMethod.Post))
+    {
+        <label class="texts">Kategori Adı</label>
+        @Html.TextBoxFor(x=>x.CategoryName, new{@class="form-control"})
+        <span asp-validation-for="CategoryName" class="text-danger">
+
+        </span>
+        <br />
+        <br />
+        <div class="form-group text-center mt-3">
+            <button class="read_more_btn">Kaydet</button>
+        </div>
+    }
+</div>
+

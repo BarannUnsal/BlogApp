@@ -1,0 +1,88 @@
+﻿@model UpdatePostViewModel
+
+@{
+    ViewData["Title"] = "Yazı Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 mt-5 pt-3 main_section">
+            <h3 class="texts">Yazı Güncelle</h3>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <form asp-action="EditPost" asp-controller="Post" enctype="multipart/form-data" method="post">
+                <input type="hidden" asp-for="Id" />
+                <div class="text-center">
+                    <p>Eski Görsel</p>
+                    <picture>
+                        <img class="img-fluid" src="~/PostThumbnail/@Model.ExistingThumbnail" />
+                    </picture>
+                </div>
+                @Html.Label("Ürün Küçük Resmi")
+                <input type="file" asp-for="Thumbnail" class="form-control texts" id="ImageMedias" />
+                <span asp-validation-for="Thumbnail" class="text-danger"></span>
+                <div class="text-center pt-3 mb-3">
+                    <p class="texts">Yeni Görsel</p>
+                    <div id="divImageMediaPreview" class="img-fluid"></div>
+                </div>
+                <div class="form-group mt-3">
+                    <label asp-for="Title" class="control-label texts"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group mt-3">
+                    <label asp-for="CategoryId" class="control-label texts"></label>
+                    <select asp-for="CategoryId" class="form-control" asp-items="@ViewBag.CategoryId"></select>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+                <div class="form-group mt-3">
+                    <label asp-for="Description" class="control-label texts"></label>
+                    <textarea asp-for="Description" id="editor"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group text-center mt-3">
+                    <input type="submit" value="Yazı Ekle" class="read_more_btn" />
+                </div>
+            </form>
+            <div>
+                <a asp-action="GetPost" asp-controller="Post">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/35.3.1/classic/ckeditor.js"></script>
+<script>
+    ClassicEditor
+        .create(document.querySelector('#editor'),
+            {
+                language: 'tr',
+                ckfinder: { uploadUrl: '/Post/OnPostUploadImage' }
+            })
+        .catch(error => { console.error(error); });
+</script>
+
+
+<script>
+    $("#ImageMedias").change(function () {
+        if (typeof (FileReader) != "undefined") {
+            var dvPreview = $("#divImageMediaPreview");
+            dvPreview.html("");
+            $($(this)[0].files).each(function () {
+                var file = $(this);
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var img = $("<img />");
+                    img.attr("style", "width: 610px; height:325px; padding: 10px");
+                    img.attr("src", e.target.result);
+                    dvPreview.append(img);
+                }
+                reader.readAsDataURL(file[0]);
+            });
+        } else {
+            alert("This browser does not support HTML5 FileReader.");
+        }
+    });
+</script>
+

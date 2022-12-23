@@ -1,0 +1,108 @@
+﻿@model IEnumerable<Category>
+
+@{
+    ViewData["Title"] = "Kategoriler";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container main_section mt-5 pt-3">
+    <h1>Kategoriler</h1>
+    <div class="table-responsive texts">
+        <table class="display table table-bordered table-hover texts" id="categoryTable">
+            <thead>
+                <tr class="texts">
+                    <th class="texts">
+                        ID
+                    </th>
+                    <th class="texts">
+                        Kategori İsmi
+                    </th>
+                    <th class="texts">
+                        Oluşturulma Tarihi
+                    </th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="texts">
+                        <td>
+                            <p>@item.Id</p>
+                        </td>
+                        <td>
+                            <p>@item.CategoryName</p>
+                        </td>
+                        <td>
+                            <p>@item.CreatedDate.ToShortDateString()</p>
+                        </td>
+                        <td style="vertical-align: middle;">
+                            <a asp-action="EditCategory" asp-controller="Category" asp-route-id="@item.Id"><i class='bx bx-edit-alt' style="font-size: 25px; color: #EF9A53"></i></a>
+                        </td>
+                        <td style="vertical-align: middle;">
+                            <a id="btnDelete" data-toggle="modal" data-target="#DeleteModal-@item.Id"><i class='bx bxs-x-circle' style="font-size: 25px; color:red; cursor:pointer"></i></a>
+                            @using (Html.BeginForm("Delete", "Category", new { id = item.Id }, FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                <div class="modal" tabindex="-1" role="dialog" id="DeleteModal-@item.Id">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">@item.CategoryName Siliniyor!!</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Silmek istediğine emin misin?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                                                <button type="submit" class="btn btn-danger">Sil</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <a class="read_more_btn mt-3 mb-3" asp-action="AddCategory" asp-controller="Category">Yeni Kategori</a>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+<script src="~/js/notify.js"></script>
+<script src="~/js/notify.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#categoryTable').DataTable();
+    });
+</script>
+
+
+@if (TempData["UpdateCategory"] != null)
+{
+    <script type="text/javascript">
+        $.notify("Başarıyla kategori güncellendi!", "success");
+    </script>
+}
+@if (TempData["AddCategory"] != null)
+{
+    <script type="text/javascript">
+        $.notify("Başarıyla yeni kategori eklendi!", "success");
+    </script>
+}
+@if (TempData["DeleteCategory"] != null)
+{
+    <script type="text/javascript">
+        $.notify("Başarıyla silindi!", "success");
+    </script>
+}

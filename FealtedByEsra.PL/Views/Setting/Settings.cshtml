@@ -1,0 +1,48 @@
+﻿@model AdminViewModel
+@{
+    ViewData["Title"] = "Ayarlar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container main_section mt-5 pt-3">
+    <h1 class="texts">Ayarlar</h1>
+    <div class="table-responsive">
+        <table id="myTable" class="display table table-bordered">
+            <tr class="texts">
+                <th>Adı Soyadı</th>
+                <td>@Model.NameSurname</td>
+            </tr>
+            <tr class="texts">
+                <th>Kullanıcı Adı</th>
+                <td>@Model.UserName</td>
+            </tr>
+            <tr class="texts">
+                <th>E-Posta</th>
+                <td>@Model.Email</td>
+            </tr>
+                <tr class="texts">
+                <th>Telefon Numarası</th>
+                <td>@Model.PhoneNumber</td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-sm-6 pb-3 align-content-center">
+        <a class="read_more_btn" asp-action="EditAccount" asp-controller="Setting">Bilgileri Güncelle</a>
+        <a class="read_more_btn" asp-action="ChangePassword" asp-controller="Setting">Şifre Değiştirme</a>
+        <a class="read_more_btn" asp-action="LogOut" asp-controller="User" asp-route-returnUrl="/Home/Index">Çıkış Yap</a>
+    </div>
+</div>
+<script src="~/js/notify.js"></script>
+<script src="~/js/notify.min.js"></script>
+@if (TempData["edituser"] != null)
+{
+    <script type="text/javascript">
+        $.notify("Bilgiler başarıyla güncellendi!", "success");
+    </script>
+}
+@if (TempData["editpassword"] != null)
+{
+    <script type="text/javascript">
+        $.notify("Şifre başarıyla güncellendi!", "success");
+    </script>
+}
