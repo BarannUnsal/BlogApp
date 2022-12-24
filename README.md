@@ -35,6 +35,8 @@ Used the design architecture n-tier architecture. Minimized the dependencies to 
 
 ## Learned While Developing
 - SOLID Principles 
+- C# 
+- .Net Core
 - Email service usage
 - Cache usage
 - Asynchronous programming
